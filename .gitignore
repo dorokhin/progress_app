@@ -1,0 +1,6 @@
+.idea/
+db.sqlite3
+tmp/
+*.pyc
+__pycache__/
+venv/
