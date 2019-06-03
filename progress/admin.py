@@ -1,3 +1,14 @@
 from django.contrib import admin
+from progress.models import PassEntry, EntryType
 
-# Register your models here.
+
+class EntryTypeAdmin(admin.ModelAdmin):
+    pass
+
+
+class PassEntryAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(EntryType, EntryTypeAdmin)
+admin.site.register(PassEntry, PassEntryAdmin)
