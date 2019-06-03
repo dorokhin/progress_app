@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from progress.views import EntryTypeListView
+from django.urls import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', EntryTypeListView.as_view()),
+    path('entry/', include('progress.urls')),
 ]
