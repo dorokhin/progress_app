@@ -1,3 +1,47 @@
-{% for item in object_list %}
-    {{ item }}
-{% endfor %}
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Base{% endblock %}
+
+{% block content %}
+    {% for item in object_list %}
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column">
+                <div class="box has-background-light">
+                    <article class="media">
+                        <div class="media-left">
+                            <figure class="image is-64x64 has-text-danger">
+                                <span class="icon is-large">
+                                    <a onclick="console.log('test')" class="fas fa-3x fa-heart"></a>
+                                </span>
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <p>
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">Тут</span>
+                                            <a href="{% url 'progress:entry-detail' item.pk %}" class="tag is-success">{{ item }}</a>
+                                        </div>
+                                    </div>
+                                        <br>
+                                        <a href="{% url 'progress:entry-detail' item.pk %}" >Смотри сколько галок</a>
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="column"></div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+
+{% block extra_css %}
+    <style>
+
+    </style>
+{% endblock %}

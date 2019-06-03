@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Base{% endblock %}
+
+{% block content %}
+    <div class="is-flex" id="cal-heatmap"></div>
+    <div id="addition-text"></div>
+
+
+    <div class="level-item has-text-centered">
+        <form action="{% url 'progress:entry-create' 1 %}" method="post">{% csrf_token %}
+            <div class="field is-grouped">
+                <div class="control">
+                    <button type="submit" class="button is-danger is-outlined">
+                        <span class="icon is-small">
+                            <i class="fas fa-check"></i>
+                        </span><span>Поставить галку</span>
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+    <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.min.js"></script>
+
+    <script>
+        let dt = new Date();
+        let timeSeries = { {% for entry in entries %}{{ entry.day|date:"U" }}: {{ entry.all_that_day }},{% endfor %} }
+        let cal = new CalHeatMap();
+        cal.init({
+            itemSelector: "#cal-heatmap",
+            start: new Date(2019, 0),
+            range: 12,
+            domain: "month",
+            subDomain: "day",
+            data: timeSeries,
+            cellSize: 25,
+            legend: [1, 2 , 3, 4],
+            legendColors: ["#ffeef5", "#ff0096"],
+            colLimit: 31,
+            verticalOrientation: true,
+            label: {
+                position: "left",
+                width: 56
+            },
+            highlight: ["now", dt],
+            onClick: function(date, nb) {
+                let additionText = document.getElementById("addition-text");
+                let galka = '';
+                if (nb === 1) {
+                    galka = 'галка';
+                } else if (nb % 2 === 0 || nb === 3) {
+                    galka = 'галки';
+                } else {
+                    galka = 'галок';
+                }
+                additionText.innerHTML = "Чо у нас тут? <br/> <b>" + (nb === null ? "Нет галок 💩" : nb + " " + galka + " за день 😍") + "</b>";
+        }
+        });
+    </script>
+{% endblock %}
+{% block extra_css %}
+    <style>
+        #cal-heatmap rect.now {
+            stroke: #21ff5b;
+            stroke-width: 1px;
+        }
+    </style>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.css" />
+{% endblock %}
