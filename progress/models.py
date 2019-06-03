@@ -13,17 +13,17 @@ class EntryType(models.Model):
 
 class PassEntry(models.Model):
 
-    type = models.ForeignKey(EntryType, related_name='entries', on_delete=models.CASCADE, verbose_name=_('Type'))
-    user = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.CASCADE)
+    entry_type = models.ForeignKey(EntryType, related_name='entries', on_delete=models.CASCADE, verbose_name=_('Type'))
+    author = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.CASCADE)
     approved = models.BooleanField(default=True, verbose_name=_('Approved'))
-    date = models.DateField(auto_now_add=True, verbose_name=_('Creation date'))
-    time = models.TimeField(auto_now_add=True, verbose_name=_('Creation time'))
+    creation_date = models.DateField(auto_now_add=True, verbose_name=_('Creation creation_date'))
+    creation_time = models.TimeField(auto_now_add=True, verbose_name=_('Creation creation_time'))
 
     def __str__(self):
-        return '{0}: {1}'.format(self.date, self.time)
+        return '{0}: {1}'.format(self.creation_date, self.creation_time)
 
     class Meta:
         verbose_name = _('PassEntry')
-        verbose_name_plural = _('PassEntry\'s')
+        verbose_name_plural = _('PassEntries')
         managed = True
-        ordering = ['-time']
+        ordering = ['-creation_time']
