@@ -8,5 +8,3 @@ class PassEntryAddForm(forms.ModelForm):
     class Meta:
         model = PassEntry
         fields = []
-
-
