@@ -4,44 +4,96 @@
 {% block title %}Base{% endblock %}
 
 {% block content %}
+    <section class="section">
+    <div class="container">
+
+
     {% for item in object_list %}
         <div class="columns">
             <div class="column"></div>
             <div class="column">
-                <div class="box has-background-light">
-                    <article class="media">
-                        <div class="media-left">
-                            <figure class="image is-64x64 has-text-danger">
-                                <span class="icon is-large">
-                                    <a onclick="console.log('test')" class="fas fa-3x fa-heart"></a>
-                                </span>
-                            </figure>
+                <div class="content is-large ">
+                    <div class="control">
+                        <div class="tags has-addons">
+                            <span class="tag is-dark is-large">Инфо</span>
+                            <span class="tag is-success is-large">{{ item.name }}</span>
                         </div>
-                        <div class="media-content">
-                            <div class="content">
-                                <p>
-                                    <div class="control">
-                                        <div class="tags has-addons">
-                                            <span class="tag is-dark">Тут</span>
-                                            <a href="{% url 'progress:entry-detail' item.pk %}" class="tag is-success">{{ item }}</a>
-                                        </div>
-                                    </div>
-                                        <br>
-                                        <a href="{% url 'progress:entry-detail' item.pk %}" >Смотри сколько галок</a>
-                                </p>
-                            </div>
-                        </div>
-                    </article>
+                    </div>
                 </div>
+
+                <div class="is-flex" id="cal-heatmap"></div>
+                <div id="addition-text"></div>
+                {% if user.is_authenticated  %}
+                    <div class="level-item has-text-centered">
+                        <form action="{% url 'progress:entry-create' item.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <button type="submit" class="button is-danger is-outlined">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-check"></i>
+                                        </span><span>Поставить галку</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
             </div>
             <div class="column"></div>
         </div>
     {% endfor %}
 {% endblock %}
 
+{% block extra_js %}
+    <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.min.js"></script>
 
+    <script>
+        let dt = new Date();
+        let timeSeries = { {% for entry in entries %}{{ entry.day|date:"U" }}: {{ entry.all_that_day }},{% endfor %} }
+        let cal = new CalHeatMap();
+        cal.init({
+            itemSelector: "#cal-heatmap",
+            start: new Date(2019, 0),
+            range: 12,
+            domain: "month",
+            subDomain: "day",
+            data: timeSeries,
+            cellSize: 25,
+            legend: [1, 2 , 3, 4],
+            legendColors: ["#ffeef5", "#ff0096"],
+            colLimit: 31,
+            verticalOrientation: true,
+            label: {
+                position: "left",
+                width: 56
+            },
+            highlight: ["now", dt],
+            onClick: function(date, nb) {
+                let additionText = document.getElementById("addition-text");
+                let galka = '';
+                if (nb === 1) {
+                    galka = 'галка';
+                } else if (nb % 2 === 0 || nb === 3) {
+                    galka = 'галки';
+                } else {
+                    galka = 'галок';
+                }
+                additionText.innerHTML = "Чо у нас тут? <br/> <b>" + (nb === null ? "Нет галок 💩" : nb + " " + galka + " за день 😍") + "</b>";
+        }
+        });
+    </script>
+{% endblock %}
 {% block extra_css %}
     <style>
-
+        #cal-heatmap rect.now {
+            stroke: #21ff5b;
+            stroke-width: 1px;
+        }
     </style>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.css" />
+
+        </div>
+    </section>
 {% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %}Login{% endblock %}
+
+
+{% block content %}
+
+
+    <section class="hero is-light is-bold is-fullheight">
+        <div class="hero-body">
+            <div class="container">
+                <div class="columns is-centered">
+                    <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+                                   {% if form.errors %}
+                    <div class="notification is-danger">
+                        <button class="delete"></button>Username, password or captcha not valid
+                    </div>
+                {% endif %}
+                        <form action="{% url 'login' %}{% if next %}?next={{next}}{% endif %}" method="post" class="form-signin">
+                            {% csrf_token %}
+                            <div class="field">
+                                <label for="id_username" class="label">Username</label>
+                                <div class="control has-icons-left">
+                                    <input type="text" id="id_username" name="username" class="input" placeholder="{% trans 'User name' %}" required autofocus>
+                                    <button class="btn btn-lg btn-primary btn-block" type="submit">{% trans 'Log in' %}</button>
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="id_password" class="label">Password</label>
+                                <div class="control has-icons-left">
+                                    <input type="password" id="id_password" name="password" class="input" placeholder="{% trans 'Password' %}" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                {{ form.captcha }}
+                            </div>
+                            <div class="field">
+                                <button class="button is-success">Login</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+      </div>
+
+                </section>
+{% endblock %}

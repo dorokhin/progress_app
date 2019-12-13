@@ -4,12 +4,14 @@
 {% block title %}Base{% endblock %}
 
 {% block content %}
+    <section class="section">
+    <div class="container">
     <div class="is-flex" id="cal-heatmap"></div>
     <div id="addition-text"></div>
 
 
     <div class="level-item has-text-centered">
-        <form action="{% url 'progress:entry-create' 1 %}" method="post">{% csrf_token %}
+        <form action="{% url 'progress:entry-create' object.id %}" method="post">{% csrf_token %}
             <div class="field is-grouped">
                 <div class="control">
                     <button type="submit" class="button is-danger is-outlined">
@@ -22,6 +24,8 @@
 
         </form>
     </div>
+        </div>
+    </section>
 
 {% endblock %}
 
@@ -56,6 +60,8 @@
                 let galka = '';
                 if (nb === 1) {
                     galka = 'галка';
+                } else if (nb === 6 || nb === 8 || nb === 10) {
+                    galka = 'галок';
                 } else if (nb % 2 === 0 || nb === 3) {
                     galka = 'галки';
                 } else {

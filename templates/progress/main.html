@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Base{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <article class="message is-danger">
+                <div class="message-body">Выберите ссылку из списка.</div>
+            </article>
+
+            <div class="buttons">
+                {% for link in types %}
+                    <a class="button is-large is-fullwidth is-success is-outlined" href="{% url 'progress:entry-detail' link.id %}">{{ link.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
